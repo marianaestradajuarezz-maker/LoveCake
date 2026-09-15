@@ -38,25 +38,66 @@
       text-align: center;
     }
 
-    /* 1. PANTALLA INICIO (MUESTRA TODA LA IMAGEN COMPLETA) */
+    /* 1. PANTALLA INICIO CON NUBECITA PIXELEADA */
     .pantalla-inicio {
       width: 100%;
       height: 100%;
       background-color: #2b1b22;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
     }
 
     .img-portada {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Ajusta la imagen para que se vea TODA */
+      object-fit: contain;
       display: block;
     }
 
-    /* 2. PRESENTACIÓN (MUESTRA TODA LA IMAGEN COMPLETA) */
+    /* Botón Nubecita Pixeleada Animada */
+    @keyframes flotarNubecita {
+      0% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-8px) scale(1.05); }
+      100% { transform: translateY(0px) scale(1); }
+    }
+
+    .btn-start-nube {
+      position: absolute;
+      left: 10%;
+      top: 40%;
+      background-color: #ffb6c1;
+      color: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.3rem;
+      font-weight: bold;
+      padding: 14px 22px;
+      cursor: pointer;
+      text-shadow: 2px 2px 0px #d87093;
+      border: 4px solid #ffffff;
+      
+      /* Estilo bordes tipo Nube Pixeleada */
+      border-radius: 25px 25px 20px 20px;
+      box-shadow: 
+        0 6px 0px #d87093,
+        inset -4px -4px 0px #ff94b4,
+        inset 4px 4px 0px #ffffff;
+
+      animation: flotarNubecita 2s infinite ease-in-out;
+      z-index: 10;
+    }
+
+    .btn-start-nube:hover {
+      background-color: #ffc0cb;
+    }
+
+    .btn-start-nube:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0px #d87093;
+    }
+
+    /* 2. PRESENTACIÓN */
     .pantalla-presentacion {
       width: 100%;
       height: 100%;
@@ -70,37 +111,40 @@
     .img-personaje {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Ajusta la imagen para que se vea TODA */
+      object-fit: contain;
       display: block;
     }
 
-    /* 3. GIF CON BOTÓN FÍSICO Click!💕 */
+    /* 3. GIF COMPLETO CON BOTÓN ENCIMA */
     .pantalla-cargando {
       width: 100%;
       height: 100%;
+      position: relative;
+      background-color: #2b1b22;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      padding: 25px;
-      background-color: #ffd1dc;
+      justify-content: center;
     }
 
     .gif-cargando {
       width: 100%;
-      max-height: 420px;
+      height: 100%;
       object-fit: contain;
-      border-radius: 15px;
+      display: block;
     }
 
     @keyframes pulsoBtn {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
+      0% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.08); }
+      100% { transform: translateX(-50%) scale(1); }
     }
 
     .btn-click-love {
-      background-color: #2b1b22;
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(43, 27, 34, 0.9);
       color: #ffd1dc;
       border: 2px solid #ff94b4;
       padding: 12px 35px;
@@ -109,13 +153,13 @@
       font-weight: bold;
       border-radius: 15px;
       cursor: pointer;
-      box-shadow: 0 4px 0 #1a0f14;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
       animation: pulsoBtn 1.5s infinite ease-in-out;
-      margin-bottom: 10px;
+      z-index: 10;
     }
 
     .btn-click-love:active {
-      transform: translateY(3px);
+      transform: translateX(-50%) translateY(3px);
       box-shadow: 0 0 0 #1a0f14;
     }
 
@@ -158,8 +202,9 @@
   <div class="juego-container">
     
     <!-- 1. PANTALLA INICIO -->
-    <div id="paso-1" class="pantalla-inicio" onclick="irAPresentacion()">
-      <img src="https://i.ibb.co/4RqMF81V/Love-Cakes.jpg" alt="LoveCakes Portada" class="img-portada">
+    <div id="paso-1" class="pantalla-inicio">
+      <img src="https://i.ibb.co/4Z6bKZgY/Love-Cakes.jpg" alt="LoveCakes Portada" class="img-portada">
+      <button class="btn-start-nube" onclick="irAPresentacion()">Start! ☁️</button>
     </div>
 
     <!-- 2. PRESENTACIÓN -->
@@ -167,7 +212,7 @@
       <img src="https://i.ibb.co/d41f8g6d/enjoy.jpg" alt="Presentación Personaje" class="img-personaje">
     </div>
 
-    <!-- 3. GIF CON EL BOTÓN "Click!💕" -->
+    <!-- 3. GIF COMPLETO CON EL BOTÓN "Click!💕" -->
     <div id="paso-3" class="pantalla-cargando oculto">
       <img src="https://i.ibb.co/67jG6M16/GIFLOVE.gif" alt="GIF LoveCakes" class="gif-cargando">
       <button class="btn-click-love" onclick="irAJuego()">Click!💕</button>
