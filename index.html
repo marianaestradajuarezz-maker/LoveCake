@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LoveCakes. 💕</title>
+  <title>LoveCakes 🧁</title>
   <style>
     * {
       box-sizing: border-box;
@@ -39,7 +39,7 @@
       text-align: center;
     }
 
-    /* 🌧️ LLUVIA DE BRILLITOS ✨ */
+    /* 🌧️ LLUVIA DE BRILLITOS INICIAL ✨ */
     .brillito {
       position: absolute;
       top: -30px;
@@ -58,6 +58,27 @@
       100% {
         transform: translateY(630px) rotate(360deg);
         opacity: 0.2;
+      }
+    }
+
+    /* ✨ RÁFAGA DE BRILLITOS AL DAR CLIC ✨ */
+    .brillo-click {
+      position: absolute;
+      font-size: 1.4rem;
+      user-select: none;
+      pointer-events: none;
+      z-index: 30;
+      animation: animBrilloClick 0.8s ease-out forwards;
+    }
+
+    @keyframes animBrilloClick {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(0.5);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(1.3);
       }
     }
 
@@ -107,12 +128,7 @@
       z-index: 10;
     }
 
-    .btn-start-nube:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0px #d87093;
-    }
-
-    /* 2. PRESENTACIÓN DE MARIANITA CON CUADRO FLOTANTE */
+    /* 2. PRESENTACIÓN DE MARIANITA */
     .pantalla-presentacion {
       width: 100%;
       height: 100%;
@@ -170,7 +186,7 @@
       width: 0;
     }
 
-    /* 3. GIF COMPLETO CON BOTÓN ENCIMA */
+    /* 3. GIF COMPLETO */
     .pantalla-cargando {
       width: 100%;
       height: 100%;
@@ -213,37 +229,63 @@
       z-index: 10;
     }
 
-    .btn-click-love:active {
-      transform: translateX(-50%) translateY(3px);
-    }
-
-    /* 4. SELECCIÓN DE PAN */
+    /* 4. SELECCIÓN DE PAN SOBRE EL ESCENARIO */
     .pantalla-pan {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      padding: 20px;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background-color: #2b1b22;
     }
 
-    .opciones-colores {
-      display: flex;
-      gap: 15px;
-      margin-top: 15px;
+    .img-escenario {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
 
-    .btn-color-pan {
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      border: 3px solid #ffffff;
+    /* Zonas transparentes para hacer clic en las 3 opciones */
+    .area-btn-pan {
+      position: absolute;
+      bottom: 2%;
+      width: 30%;
+      height: 25%;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-      transition: transform 0.2s;
+      border-radius: 15px;
+      z-index: 15;
     }
 
-    .btn-color-pan:hover {
-      transform: scale(1.1);
+    .area-btn-pan:active {
+      transform: scale(0.95);
+    }
+
+    .btn-chocolate { left: 3%; }
+    .btn-vainilla { left: 35%; }
+    .btn-fresa { left: 67%; }
+
+    /* OSITO ANIMADO PREPARANDO EL PASTEL */
+    .gif-osito-preparando {
+      position: absolute;
+      top: 32%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: auto;
+      z-index: 12;
+      pointer-events: none;
+    }
+
+    /* PASTEL SELECCIONADO EN LA MESA */
+    .img-pastel-mesa {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: auto;
+      z-index: 10;
+      filter: drop-shadow(0 8px 10px rgba(0,0,0,0.25));
+      transition: transform 0.3s ease;
     }
 
     .oculto {
@@ -275,39 +317,44 @@
       <button class="btn-click-love" onclick="irAJuego()">Click!💕</button>
     </div>
 
-    <!-- 4. SELECCIÓN DE PAN -->
+    <!-- 4. SELECCIÓN DE PAN SOBRE EL ESCENARIO -->
     <div id="paso-4" class="pantalla-pan oculto">
-      <h3>Elige el sabor del pan:</h3>
-      <div class="opciones-colores">
-        <button class="btn-color-pan" style="background-color: #5c3826;" title="Chocolate" onclick="seleccionarPan('Chocolate')"></button>
-        <button class="btn-color-pan" style="background-color: #f7e0a3;" title="Vainilla" onclick="seleccionarPan('Vainilla')"></button>
-        <button class="btn-color-pan" style="background-color: #a82e3e;" title="Red Velvet" onclick="seleccionarPan('Red Velvet')"></button>
-      </div>
+      <img src="https://i.ibb.co/KpCMGLn2/escenario.jpg" alt="Escenario LoveCakes" class="img-escenario">
+
+      <!-- GIF del Osito (Oculto al inicio) -->
+      <img id="gif-osito" src="https://i.ibb.co/NgMVcv8d/beso-ezgif-com-remove-background.gif" alt="Preparando..." class="gif-osito-preparando oculto">
+
+      <!-- Imagen del pastel elegido (Oculto al inicio) -->
+      <img id="pastel-mesa" src="" alt="Pastel" class="img-pastel-mesa oculto">
+
+      <!-- Botones transparentes (Izquierda a Derecha) -->
+      <div class="area-btn-pan btn-chocolate" onclick="seleccionarPan('https://i.ibb.co/ynBwVJsp/chocolate-removebg-preview.png', event)"></div>
+      <div class="area-btn-pan btn-vainilla" onclick="seleccionarPan('https://i.ibb.co/QFgZ5BhM/vainilla-removebg-preview.png', event)"></div>
+      <div class="area-btn-pan btn-fresa" onclick="seleccionarPan('https://i.ibb.co/B5Pb5L44/fresa-removebg-preview.png', event)"></div>
     </div>
 
   </div>
 
   <script>
-    // GENERADOR DE LLUVIA DE BRILLITOS ✨
+    let intervaloBrillitos;
+
     function crearLluviaBrillitos() {
       const contenedor = document.getElementById('contenedor-juego');
-      const cantidad = 15;
-
-      for (let i = 0; i < cantidad; i++) {
+      intervaloBrillitos = setInterval(() => {
         const brillo = document.createElement('div');
         brillo.classList.add('brillito');
         brillo.innerHTML = '✨';
-        
         brillo.style.left = Math.random() * 92 + '%';
-        
-        const duracion = Math.random() * 3 + 3;
-        const retraso = Math.random() * 4;
-        
-        brillo.style.animationDuration = duracion + 's';
-        brillo.style.animationDelay = retraso + 's';
-        
+        brillo.style.animationDuration = (Math.random() * 3 + 3) + 's';
         contenedor.appendChild(brillo);
-      }
+
+        setTimeout(() => brillo.remove(), 6000);
+      }, 400);
+    }
+
+    function detenetLluviaBrillitos() {
+      clearInterval(intervaloBrillitos);
+      document.querySelectorAll('.brillito').forEach(b => b.remove());
     }
 
     crearLluviaBrillitos();
@@ -323,12 +370,48 @@
     }
 
     function irAJuego() {
+      detenetLluviaBrillitos();
       document.getElementById('paso-3').classList.add('oculto');
       document.getElementById('paso-4').classList.remove('oculto');
     }
 
-    function seleccionarPan(color) {
-      alert("¡Elegiste el pan sabor " + color + "!");
+    function seleccionarPan(urlPastel, event) {
+      // 1. Ráfaga de brillitos desde el botón seleccionado
+      const rect = event.target.getBoundingClientRect();
+      const contenedorRect = document.getElementById('contenedor-juego').getBoundingClientRect();
+      
+      const x = rect.left - contenedorRect.left + rect.width / 2;
+      const y = rect.top - contenedorRect.top + rect.height / 2;
+
+      for (let i = 0; i < 8; i++) {
+        const b = document.createElement('div');
+        b.classList.add('brillo-click');
+        b.innerHTML = '✨';
+        b.style.left = x + 'px';
+        b.style.top = y + 'px';
+        
+        const tx = (Math.random() - 0.5) * 120 + 'px';
+        const ty = (Math.random() - 0.5) * 120 - 40 + 'px';
+        b.style.setProperty('--tx', tx);
+        b.style.setProperty('--ty', ty);
+
+        document.getElementById('contenedor-juego').appendChild(b);
+        setTimeout(() => b.remove(), 800);
+      }
+
+      // 2. Ocultar pastel actual (si había uno) y mostrar el Osito
+      const osito = document.getElementById('gif-osito');
+      const pastelMesa = document.getElementById('pastel-mesa');
+
+      pastelMesa.classList.add('oculto');
+      osito.classList.remove('oculto');
+
+      // 3. Pasar 2 segundos, ocultar Osito y mostrar el pastel seleccionado
+      setTimeout(() => {
+        osito.classList.add('oculto');
+        pastelMesa.src = urlPastel;
+        pastelMesa.classList.remove('oculto');
+      }, 2000);
     }
   </script>
 
